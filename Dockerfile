@@ -1,5 +1,5 @@
 # Dockerfile
-FROM python:3.8-slim
+FROM python:3.9-slim
 
 # Set the working directory
 WORKDIR /app
@@ -18,20 +18,3 @@ EXPOSE 5000
 
 # Command to run the application
 CMD ["python", "app.py"]
-```
-
-### Step 12: Create `docker-compose.yml`
-
-Create a `docker-compose.yml` file to define services.
-
-```yaml
-# docker-compose.yml
-version: '3.8'
-
-services:
-  app:
-    build: .
-    ports:
-      - "5000:5000"
-    env_file:
-      - .env

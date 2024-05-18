@@ -2,3 +2,5 @@
 Flask
 python-dotenv
 requests
+flake8
+pytest

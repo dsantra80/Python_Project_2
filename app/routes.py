@@ -1,35 +1,43 @@
-# app/routes.py
 from flask import Blueprint, request, jsonify, current_app
-import requests
+from app.model import query_gradientai
+import threading
 
 main = Blueprint('main', __name__)
 
-def query_gradientai(prompt):
-    url = current_app.config['GRADIENT_AI_URL']
-    max_tokens = current_app.config['MAX_TOKENS']
-    temperature = current_app.config['TEMPERATURE']
-    
-    headers = {
-        'Content-Type': 'application/json',
-    }
-    payload = {
-        'prompt': prompt,
-        'max_tokens': max_tokens,
-        'temperature': temperature,
-    }
-    response = requests.post(url, headers=headers, json=payload)
-    response.raise_for_status()
-    return response.json()
+def validate_input(data):
+    if not isinstance(data, dict):
+        return False, "Invalid input format. Expected a JSON object."
+    required_keys = ['user_input', 'system_prompt']
+    for key in required_keys:
+        if key not in data:
+            return False, f"Missing required field: {key}"
+    return True, None
 
-@main.route('/ask', methods=['POST'])
-def ask():
-    data = request.json
-    if 'prompt' not in data:
-        return jsonify({'error': 'No prompt provided'}), 400
+@main.route('/generate', methods=['POST'])
+def generate_text():
+    data = request.get_json()
+    is_valid, error_message = validate_input(data)
+    if not is_valid:
+        return jsonify({'error': error_message}), 400
 
-    prompt = data['prompt']
-    try:
-        result = query_gradientai(prompt)
-        return jsonify(result)
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+    user_input = data.get('user_input', '')
+    system_prompt = data.get('system_prompt', '')
+    max_tokens = data.get('max_tokens', current_app.config['MAX_TOKENS'])
+    temperature = data.get('temperature', current_app.config['TEMPERATURE'])
+
+    prompt = f"{system_prompt}\n{user_input}"
+    result = {}
+
+    def model_inference():
+        result['generated_text'] = query_gradientai(prompt, max_tokens, temperature)
+
+    thread = threading.Thread(target=model_inference)
+    thread.start()
+    thread.join()
+
+    return jsonify({'generated_text': result.get('generated_text', 'Error in model inference')})
+
+
+@main.route('/status', methods=['GET'])
+def status():
+    return jsonify({'status': 'API is running'})
