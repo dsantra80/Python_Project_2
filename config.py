@@ -7,3 +7,4 @@ class Config:
     GRADIENT_AI_URL = os.getenv('GRADIENT_AI_URL')
     MAX_TOKENS = int(os.getenv('MAX_TOKENS', 100))
     TEMPERATURE = float(os.getenv('TEMPERATURE', 0.7))
+    
