@@ -12,3 +12,4 @@ def test_status(client):
     rv = client.get('/status')
     assert rv.status_code == 200
     assert b'API is running' in rv.data
+    
