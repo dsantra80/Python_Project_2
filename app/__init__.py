@@ -6,3 +6,4 @@ def create_app():
     app.config.from_object('config.Config')
     app.register_blueprint(main)
     return app
+    
