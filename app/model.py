@@ -17,3 +17,4 @@ def query_gradientai(prompt, max_tokens, temperature):
             return response.json().get('generated_text', '')
         else:
             return f"Error: {response.status_code}"
+            
