@@ -27,7 +27,7 @@ jobs:
           python -m venv venv
           source venv/bin/activate
           pip install -r requirements.txt
-          pip install flake8 pytest
+          pip install flake8 pytest --no-build-isolation
 
       - name: Lint with flake8
         run: |
