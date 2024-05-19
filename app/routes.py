@@ -36,6 +36,7 @@ def generate_text():
     thread.join()
 
     return jsonify({'generated_text': result.get('generated_text', 'Error in model inference')})
+    
 
 
 @main.route('/status', methods=['GET'])
