@@ -13,49 +13,31 @@ def validate_input(data):
             return False, f"Missing required field: {key}"
     return True, None
 
-#@main.route('/generate', methods=['POST'])
-#def generate_text():
-#    data = request.get_json()
-#    is_valid, error_message = validate_input(data)
-#    if not is_valid:
-#        return jsonify({'error': error_message}), 400
 
-#    user_input = data.get('user_input', '')
-#    system_prompt = data.get('system_prompt', '')
-#    max_tokens = data.get('max_tokens', current_app.config['MAX_TOKENS'])
-#    temperature = data.get('temperature', current_app.config['TEMPERATURE'])
+@main.route('/generate', methods=['POST'])
+def generate_text():
+    data = request.get_json()
+    is_valid, error_message = validate_input(data)
+    if not is_valid:
+        return jsonify({'error': error_message}), 400
 
-#    prompt = f"{system_prompt}\n{user_input}"
-#    result = {}
-
-@app.route('/generate', methods=['POST'])
-def generate():
-    data = request.json
-    user_input = data.get('user_input')
+    user_input = data.get('user_input', '')
     system_prompt = data.get('system_prompt', '')
+    max_tokens = data.get('max_tokens', current_app.config['MAX_TOKENS'])
+    temperature = data.get('temperature', current_app.config['TEMPERATURE'])
 
-    if not user_input:
-        return jsonify({'error': 'Missing required field: user_input'}), 400
-
-    prompt = system_prompt + " " + user_input if system_prompt else user_input
+    prompt = f"{system_prompt}\n{user_input}"
     result = {}
-    gradient_ai_url = app.config['GRADIENT_AI_URL']
 
+    def model_inference():
+        result['generated_text'] = query_gradientai(prompt, max_tokens, temperature)
 
-#   def model_inference():
-#        result['generated_text'] = query_gradientai(prompt, max_tokens, temperature)
-#
-#    thread = threading.Thread(target=model_inference)
-#    thread.start()
-#    thread.join()
+    thread = threading.Thread(target=model_inference)
+    thread.start()
+    thread.join()
 
- #   return jsonify({'generated_text': result.get('generated_text', 'Error in model inference')})
+    return jsonify({'generated_text': result.get('generated_text', 'Error in model inference')})
 
-def model_inference(result, prompt, max_tokens, temperature, gradient_ai_url):
-    # No need for app.app_context() as we are passing necessary config directly
-    result['generated_text'] = query_gradientai(prompt, max_tokens, temperature, gradient_ai_url)
-    
-    return jsonify(result)    
 
 @main.route('/status', methods=['GET'])
 def status():
