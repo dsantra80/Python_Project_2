@@ -10,7 +10,7 @@ on:
 jobs:
 
 - name: free disk space
-      run: |
+      run:
         sudo swapoff -a
         sudo rm -f /swapfile
         sudo apt clean
