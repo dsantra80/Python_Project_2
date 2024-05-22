@@ -1,3 +1,14 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+
+jobs:
+
 - name: free disk space
       run: |
         sudo swapoff -a
