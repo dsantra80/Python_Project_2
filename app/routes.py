@@ -37,6 +37,8 @@ def generate_text():
 
     return jsonify({'generated_text': result.get('generated_text', 'Error in model inference')})
 
+
 @main.route('/status', methods=['GET'])
 def status():
     return jsonify({'status': 'API is running'})
+    
