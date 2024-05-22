@@ -10,9 +10,8 @@ on:
 jobs:
 
 - name: free disk space
-      run:
-        sudo swapoff -a
-        sudo rm -f /swapfile
-        sudo apt clean
-        docker rmi $(docker image ls -aq)
-        df -h
+      run: sudo swapoff -a
+      run:   sudo rm -f /swapfile
+      run:  sudo apt clean
+      run:  docker rmi $(docker image ls -aq)
+      run:  df -h
