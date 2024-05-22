@@ -1,10 +1,17 @@
-from transformers import AutoModelForCausalLM, AutoTokenizer
+#from transformers import AutoModelForCausalLM, AutoTokenizer
+from transformers import LlamaForCausalLM, LlamaTokenizer
 import torch
+import os
 
-# Load model and tokenizer globally to avoid re-loading on each request
-model_name = "meta-llama/LLaMA-3b"  # Replace with the actual model name
-tokenizer = AutoTokenizer.from_pretrained(model_name)
-model = AutoModelForCausalLM.from_pretrained(model_name)
+# Ensure you have the correct model name
+model_name = "LlamaForCausalLM.from_pretrained("/output/path")"  # Replace with the correct model name
+
+# Get your Hugging Face token from environment variables
+hf_token = os.getenv("LlamaTokenizer.from_pretrained("/output/path")")
+
+# Load model and tokenizer with authentication if required
+tokenizer = LlamaTokenizer.from_pretrained(model_name, use_auth_token=hf_token)
+model = LlamaForCausalLM.from_pretrained(model_name, use_auth_token=hf_token)
 
 def query_gradientai(prompt, max_tokens=100, temperature=0.7):
     # Tokenize input prompt
