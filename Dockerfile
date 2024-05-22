@@ -9,6 +9,7 @@ COPY requirements.txt requirements.txt
 
 # Install the dependencies
 RUN pip install -r requirements.txt
+RUN pip install sentencepiece
 
 # Copy the application files
 COPY . .
