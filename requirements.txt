@@ -6,4 +6,3 @@ flake8
 pytest
 transformers
 torch
-sentencepiece
