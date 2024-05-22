@@ -13,7 +13,6 @@ def validate_input(data):
             return False, f"Missing required field: {key}"
     return True, None
 
-
 @main.route('/generate', methods=['POST'])
 def generate_text():
     data = request.get_json()
@@ -37,7 +36,6 @@ def generate_text():
     thread.join()
 
     return jsonify({'generated_text': result.get('generated_text', 'Error in model inference')})
-
 
 @main.route('/status', methods=['GET'])
 def status():
